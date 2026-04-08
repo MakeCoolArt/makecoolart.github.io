@@ -1,45 +1,16 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Photon Chat Web</title>
-    <!-- Include the Photon Chat SDK -->
+    <title>Photon Chat on Render</title>
+    <!-- Include Photon SDK -->
     <script src="https://jsdelivr.net"></script>
 </head>
 <body>
-    <div id="chat-window" style="height:300px; overflow-y:scroll; border:1px solid #ccc;"></div>
-    <input type="text" id="message-input" placeholder="Type a message...">
+    <div id="status">Connecting...</div>
+    <div id="messages" style="height: 200px; overflow-y: scroll; border: 1px solid #ccc;"></div>
+    <input type="text" id="chatInput" placeholder="Type a message...">
     <button onclick="sendMessage()">Send</button>
 
-    <script>
-        // REPLACE with your actual App ID and Version
-        const appId = "a4af6cf1-6088-4076-9ddf-50597d583c4d";
-        const appVersion = "1.0";
-        
-        // Initialize Chat Client
-        const chatClient = new Photon.Chat.ChatClient(appId, appVersion);
-        
-        // Start connection
-        chatClient.connectToRegionMaster("US"); // or "EU", "ASIA"
-
-        // Handle incoming messages
-        chatClient.onGetMessages = function(channelName, senders, messages) {
-            const window = document.getElementById('chat-window');
-            for (let i = 0; i < senders.length; i++) {
-                window.innerHTML += `<p><b>${senders[i]}:</b> ${messages[i]}</p>`;
-            }
-        };
-
-        function sendMessage() {
-            const input = document.getElementById('message-input');
-            // 'GlobalChat' is the channel name
-            chatClient.publishMessage("GlobalChat", input.value);
-            input.value = "";
-        }
-
-        // Required: Photon needs a "Service" loop to stay alive
-        setInterval(() => {
-            chatClient.service();
-        }, 100);
-    </script>
+    <script src="app.js"></script>
 </body>
 </html>
