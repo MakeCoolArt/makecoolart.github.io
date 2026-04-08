@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Photon Webhook Simulator</title>
+</head>
+<body>
+    <h1>Simulate Photon Chat Webhook</h1>
+    <!-- Replace action URL with your actual server endpoint -->
+    <form action="https://your-server.com" method="POST">
+        
+        <h3>Simulated Payload Data</h3>
+        <label for="UserId">User ID:</label><br>
+        <input type="text" id="UserId" name="UserId" value="Player_99"><br><br>
+
+        <label for="Nickname">Nickname:</label><br>
+        <input type="text" id="Nickname" name="Nickname" value="ShadowHunter"><br><br>
+
+        <label for="Message">Message Content:</label><br>
+        <textarea id="Message" name="Message">Hello, this is a test message!</textarea><br><br>
+
+        <label for="ChannelName">Channel:</label><br>
+        <input type="text" id="ChannelName" name="ChannelName" value="GlobalChat"><br><br>
+
+        <button type="submit">Send Simulated Webhook</button>
+    </form>
+
+    <p><em>Note: Photon normally sends this data automatically as a <strong>JSON POST</strong>. This form uses standard form-encoding for easy browser testing.</em></p>
+</body>
+</html>
