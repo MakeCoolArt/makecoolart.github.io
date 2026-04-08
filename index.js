@@ -2,16 +2,20 @@ const express = require('express');
 const app = express();
 app.use(express.json());
 
-// 1. ADD THIS: This handles when YOU visit the website in a browser
-app.get('/', (req, res) => {
-    res.send('Webhook server is live and waiting for Photon!');
-});
-
-// 2. This handles when PHOTON sends data (not viewable in browser)
+// Mandatory Response for Photon
 app.post('/photon-webhook', (req, res) => {
-    console.log("Received from Photon:", req.body);
+    console.log("New Message Received by Webhook:", req.body.Message);
+    
+    // Photon REQUIREs this specific JSON response to succeed
     res.status(200).json({ "ResultCode": 0 });
 });
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+// Root URL to confirm the server is live in your browser
+app.get('/', (req, res) => {
+    res.send("Webhook server is active!");
+});
+
+const PORT = process.env.PORT || 10000;
+app.listen(PORT, '0.0.0.0', () => {
+    console.log(`Server listening on port ${PORT}`);
+});
