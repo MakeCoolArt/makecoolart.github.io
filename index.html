@@ -1,30 +1,45 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Photon Webhook Simulator</title>
+    <title>Photon Chat Web</title>
+    <!-- Include the Photon Chat SDK -->
+    <script src="https://jsdelivr.net"></script>
 </head>
 <body>
-    <h1>Simulate Photon Chat Webhook</h1>
-    <!-- Replace action URL with your actual server endpoint -->
-    <form action="https://makecoolart-github-io.onrender.com" method="POST">
+    <div id="chat-window" style="height:300px; overflow-y:scroll; border:1px solid #ccc;"></div>
+    <input type="text" id="message-input" placeholder="Type a message...">
+    <button onclick="sendMessage()">Send</button>
+
+    <script>
+        // REPLACE with your actual App ID and Version
+        const appId = "YOUR_PHOTON_CHAT_APP_ID";
+        const appVersion = "1.0";
         
-        <h3>Simulated Payload Data</h3>
-        <label for="UserId">User ID:</label><br>
-        <input type="text" id="UserId" name="UserId" value="Player_99"><br><br>
+        // Initialize Chat Client
+        const chatClient = new Photon.Chat.ChatClient(appId, appVersion);
+        
+        // Start connection
+        chatClient.connectToRegionMaster("US"); // or "EU", "ASIA"
 
-        <label for="Nickname">Nickname:</label><br>
-        <input type="text" id="Nickname" name="Nickname" value="ShadowHunter"><br><br>
+        // Handle incoming messages
+        chatClient.onGetMessages = function(channelName, senders, messages) {
+            const window = document.getElementById('chat-window');
+            for (let i = 0; i < senders.length; i++) {
+                window.innerHTML += `<p><b>${senders[i]}:</b> ${messages[i]}</p>`;
+            }
+        };
 
-        <label for="Message">Message Content:</label><br>
-        <textarea id="Message" name="Message">Hello, this is a test message!</textarea><br><br>
+        function sendMessage() {
+            const input = document.getElementById('message-input');
+            // 'GlobalChat' is the channel name
+            chatClient.publishMessage("GlobalChat", input.value);
+            input.value = "";
+        }
 
-        <label for="ChannelName">Channel:</label><br>
-        <input type="text" id="ChannelName" name="ChannelName" value="GlobalChat"><br><br>
-
-        <button type="submit">Send Simulated Webhook</button>
-    </form>
-
-    <p><em>Note: Photon normally sends this data automatically as a <strong>JSON POST</strong>. This form uses standard form-encoding for easy browser testing.</em></p>
+        // Required: Photon needs a "Service" loop to stay alive
+        setInterval(() => {
+            chatClient.service();
+        }, 100);
+    </script>
 </body>
 </html>
