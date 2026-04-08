@@ -1,15 +1,17 @@
 const express = require('express');
 const app = express();
-app.use(express.json()); // Essential to read Photon's JSON payload
+app.use(express.json());
 
-// The endpoint Photon will call
+// 1. ADD THIS: This handles when YOU visit the website in a browser
+app.get('/', (req, res) => {
+    res.send('Webhook server is live and waiting for Photon!');
+});
+
+// 2. This handles when PHOTON sends data (not viewable in browser)
 app.post('/photon-webhook', (req, res) => {
-    console.log("Received data from Photon:", req.body);
-
-    // YOU MUST return ResultCode: 0 for Photon to succeed
+    console.log("Received from Photon:", req.body);
     res.status(200).json({ "ResultCode": 0 });
 });
 
-// Use Render's dynamic port or default to 3000
-const PORT = process.env.PORT || 10000;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
